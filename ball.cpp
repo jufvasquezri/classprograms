@@ -4,7 +4,10 @@
 
 //constantes
 const double G = 9.81;
-const double DT = 0.1;
+const double DT = 0.001;
+const int N = 10000;
+const double  K = 199.87; 
+
 
 struct particle {
 
@@ -22,8 +25,20 @@ int main(void)
   //initial conditions
   ball.y = 9.88;
   ball.mass = 2.65;
+  ball.rad = 0.15;
   
   std::cout << ball.x << "    " << ball.y << std::endl;
+  
+  
+  for  (int ii = 0; ii <= N ; ++ii ){
+      compute_forces(ball);
+      time_step(ball,DT);
+      
+      std::cout << ii*DT << "    "
+		<< ball.x << "    " << ball.y << "    "
+		<< ball.vx << "    " << ball.vy
+		<< std::endl;
+    }
   
   return 0;
 }
@@ -35,6 +50,12 @@ void compute_forces(particle & bola)
   bola.fy=0.0;
   
   bola.fy += -bola.mass*G;
+
+  double delta = bola.rad - bola.y;
+  if(delta > 0)
+
+    bola.fy += K*delta;
+    
 }
 
 void time_step(particle & bola, const double dt)
