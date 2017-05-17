@@ -7,7 +7,7 @@ const double G = 9.81;
 const double DT = 0.001;
 const int N = 10000;
 const double  K = 199.87; 
-
+const double Lx= 10.0;
 
 struct particle {
 
@@ -26,13 +26,15 @@ int main(void)
   ball.y = 9.88;
   ball.mass = 2.65;
   ball.rad = 0.15;
-  
+  ball.vx = 5.0;
+
   std::cout << ball.x << "    " << ball.y << std::endl;
   
   
   for  (int ii = 0; ii <= N ; ++ii ){
       compute_forces(ball);
-      time_step(ball,DT);
+
+     time_step(ball,DT);
       
       std::cout << ii*DT << "    "
 		<< ball.x << "    " << ball.y << "    "
@@ -51,10 +53,15 @@ void compute_forces(particle & bola)
   
   bola.fy += -bola.mass*G;
 
-  double delta = bola.rad - bola.y;
-  if(delta > 0)
+  double h = bola.rad - bola.y;
+  if(h > 0)
 
-    bola.fy += K*delta;
+    bola.fy += K*h;
+
+   double d = bola.x+bola.rad-Lx;
+  if(d > 0)
+
+    bola.fx += - K*d;
     
 }
 
